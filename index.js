@@ -5,6 +5,9 @@ require("dotenv").config();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const port = process.env.PORT || 5000;
 
+// import modules
+const logoApi = require("./apis/logoApi/logoApi");
+
 const corsConfig = {
   origin: "*",
   credentials: true,
@@ -31,12 +34,22 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    // collection start
+    const logosCollection = client.db("agent-list-book").collection("logos");
+
+    // collection end
+
+    // Apis start
+    app.use("/logos", logoApi(logosCollection));
+    // Apis end
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("MongoDB Connected ✅");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
