@@ -31,18 +31,17 @@ const client = new MongoClient(uri, {
   },
 });
 
-async function run() {
+async function connectWithRetry() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
+    // Connect the client to the server (optional starting in v4.7)
     await client.connect();
+    console.log("MongoDB Connected ✅");
 
-    // collection start
+    // Start collections
     const logosCollection = client.db("agent-list-book").collection("logos");
     const homeContentsCollection = client
       .db("agent-list-book")
       .collection("homeContents");
-
-    // collection end
 
     // Apis start
     app.use("/logos", logoApi(logosCollection));
@@ -51,13 +50,17 @@ async function run() {
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log("MongoDB Connected ✅");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
+    console.log("Ping successful");
+  } catch (error) {
+    console.error(
+      "Failed to connect to MongoDB, retrying in 5 seconds...",
+      error
+    );
+    setTimeout(connectWithRetry, 5000);
   }
 }
-run().catch(console.dir);
+
+connectWithRetry();
 
 // =====basic set up=======
 app.get("/", (req, res) => {
@@ -66,4 +69,11 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => {
   console.log("Agent list book server is running on port:🔥", port);
+});
+
+// Graceful shutdown
+process.on("SIGINT", async () => {
+  console.log("SIGINT signal received: closing MongoDB client");
+  await client.close();
+  process.exit(0);
 });
