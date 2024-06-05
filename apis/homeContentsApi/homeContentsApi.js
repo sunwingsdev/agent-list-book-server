@@ -6,7 +6,6 @@ const homeContentsApi = (homeContentsCollection) => {
   //   add home contents
   contentsRouter.post("/", async (req, res) => {
     const contentInfo = req.body;
-    console.log(req.body);
     contentInfo.createdAt = new Date();
     const result = await homeContentsCollection.insertOne(contentInfo);
     res.send(result);
