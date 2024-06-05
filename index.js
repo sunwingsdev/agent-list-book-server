@@ -10,7 +10,7 @@ const logoApi = require("./apis/logoApi/logoApi");
 const homeContentsApi = require("./apis/homeContentsApi/homeContentsApi");
 
 const corsConfig = {
-  origin: "*",
+  origin: ["http://localhost:5173", "*"],
   credentials: true,
   optionSuccessStatus: 200,
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
