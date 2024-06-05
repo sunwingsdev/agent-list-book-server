@@ -7,6 +7,7 @@ const port = process.env.PORT || 5000;
 
 // import modules
 const logoApi = require("./apis/logoApi/logoApi");
+const homeContentsApi = require("./apis/homeContentsApi/homeContentsApi");
 
 const corsConfig = {
   origin: "*",
@@ -37,11 +38,15 @@ async function run() {
 
     // collection start
     const logosCollection = client.db("agent-list-book").collection("logos");
+    const homeContentsCollection = client
+      .db("agent-list-book")
+      .collection("homeContents");
 
     // collection end
 
     // Apis start
     app.use("/logos", logoApi(logosCollection));
+    app.use("/home-contents", homeContentsApi(homeContentsCollection));
     // Apis end
 
     // Send a ping to confirm a successful connection
