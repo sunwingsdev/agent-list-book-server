@@ -5,7 +5,7 @@ require("dotenv").config();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const port = process.env.PORT || 5000;
 
-// import modules
+// Import modules
 const logoApi = require("./apis/logoApi/logoApi");
 const homeContentsApi = require("./apis/homeContentsApi/homeContentsApi");
 
@@ -16,12 +16,13 @@ const corsConfig = {
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
 };
 
-// =====middlewares======
+// ===== Middlewares =====
 app.use(cors(corsConfig));
 app.options("", cors(corsConfig));
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.1xm2m6f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -31,37 +32,35 @@ const client = new MongoClient(uri, {
   },
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  tls: true, // Ensure TLS/SSL is enabled
-  tlsCAFile: "/path/to/ca-cert.pem", // Optional: Path to CA certificate if needed
-  tlsAllowInvalidCertificates: true,
 });
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
+    // Connect the client to the server
     await client.connect();
+    console.log("MongoDB Connected ✅");
 
-    // collection start
+    // Collection start
     const logosCollection = client.db("agent-list-book").collection("logos");
     const homeContentsCollection = client
       .db("agent-list-book")
       .collection("homeContents");
 
-    // collection end
-
-    // Apis start
+    // APIs start
     app.use("/logos", logoApi(logosCollection));
     app.use("/home-contents", homeContentsApi(homeContentsCollection));
-    // Apis end
+    // APIs end
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log("MongoDB Connected ✅");
+  } catch (err) {
+    console.error("Error connecting to MongoDB:", err);
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
   }
 }
+
 run().catch(console.dir);
 
 // =====basic set up=======
