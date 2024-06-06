@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
 const port = process.env.PORT || 5000;
+const { MongoClient, ServerApiVersion } = require("mongodb");
 
 // import modules
 const logoApi = require("./apis/logoApi/logoApi");
