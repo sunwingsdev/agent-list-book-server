@@ -29,6 +29,11 @@ const client = new MongoClient(uri, {
     strict: true,
     deprecationErrors: true,
   },
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  tls: true, // Ensure TLS/SSL is enabled
+  tlsCAFile: "/path/to/ca-cert.pem", // Optional: Path to CA certificate if needed
+  tlsAllowInvalidCertificates: true,
 });
 
 async function run() {
