@@ -8,6 +8,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 // import modules
 const logoApi = require("./apis/logoApi/logoApi");
 const homeContentsApi = require("./apis/homeContentsApi/homeContentsApi");
+const dataApi = require("./apis/dataApi/dataApi");
 
 const corsConfig = {
   origin: ["http://localhost:5173", "*"],
@@ -41,12 +42,14 @@ async function run() {
     const homeContentsCollection = client
       .db("agent-list-book")
       .collection("homeContents");
+    const dataCollection = client.db("agent-list-book").collection("data");
 
     // collection end
 
     // Apis start
     app.use("/logos", logoApi(logosCollection));
     app.use("/home-contents", homeContentsApi(homeContentsCollection));
+    app.use("/data", dataApi(dataCollection));
     // Apis end
 
     // Send a ping to confirm a successful connection
@@ -67,4 +70,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log("Agent list book server is running on port:🔥", port);
 });
- 
