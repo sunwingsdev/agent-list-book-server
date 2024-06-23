@@ -9,6 +9,8 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const logoApi = require("./apis/logoApi/logoApi");
 const homeContentsApi = require("./apis/homeContentsApi/homeContentsApi");
 const dataApi = require("./apis/dataApi/dataApi");
+const headlineApi = require("./apis/headlineApi/headlineApi");
+const usersApi = require("./apis/usersApi/usersApi");
 
 const corsConfig = {
   origin: ["http://localhost:5173", "*"],
@@ -43,6 +45,10 @@ async function run() {
       .db("agent-list-book")
       .collection("homeContents");
     const dataCollection = client.db("agent-list-book").collection("data");
+    const headlineCollection = client
+      .db("agent-list-book")
+      .collection("headline");
+    const usersCollection = client.db("agent-list-book").collection("users");
 
     // collection end
 
@@ -50,6 +56,8 @@ async function run() {
     app.use("/logos", logoApi(logosCollection));
     app.use("/home-contents", homeContentsApi(homeContentsCollection));
     app.use("/data", dataApi(dataCollection));
+    app.use("/headline", headlineApi(headlineCollection));
+    app.use("/users", usersApi(usersCollection));
     // Apis end
 
     // Send a ping to confirm a successful connection

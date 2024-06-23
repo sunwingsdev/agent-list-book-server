@@ -37,6 +37,15 @@ const dataApi = (dataCollection) => {
     res.send(result);
   });
 
+  dataRouter.patch("/:id", async (req, res) => {
+    const id = req.params.id;
+    const dataInfo = req.body;
+    const query = { _id: new ObjectId(id) };
+    const updatedDoc = { $set: dataInfo };
+    const result = await dataCollection.updateOne(query, updatedDoc);
+    res.send(result);
+  });
+
   return dataRouter;
 };
 
