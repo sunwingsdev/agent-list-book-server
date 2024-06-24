@@ -13,7 +13,14 @@ const headlineApi = require("./apis/headlineApi/headlineApi");
 const usersApi = require("./apis/usersApi/usersApi");
 
 const corsConfig = {
-  origin: ["http://localhost:5173", "*"],
+  origin: [
+    "http://localhost:5173",
+    "*",
+    "https://agentlist.oracletechnology.net",
+    "http://agentlist.oracletechnology.net",
+    "www.agentlist.oracletechnology.net",
+    "agentlist.oracletechnology.net",
+  ],
   credentials: true,
   optionSuccessStatus: 200,
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
